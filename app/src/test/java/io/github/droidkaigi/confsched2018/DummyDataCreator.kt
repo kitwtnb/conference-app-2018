@@ -8,11 +8,14 @@ import io.github.droidkaigi.confsched2018.data.db.entity.SessionWithSpeakers
 import io.github.droidkaigi.confsched2018.data.db.entity.SpeakerEntity
 import io.github.droidkaigi.confsched2018.data.db.entity.TopicEntity
 import io.github.droidkaigi.confsched2018.model.Level
+import io.github.droidkaigi.confsched2018.model.Level.Companion.BEGINNER
+import io.github.droidkaigi.confsched2018.model.Level.Companion.NICHE
 import io.github.droidkaigi.confsched2018.model.Room
 import io.github.droidkaigi.confsched2018.model.Session
 import io.github.droidkaigi.confsched2018.model.SessionFeedback
 import io.github.droidkaigi.confsched2018.model.Speaker
 import io.github.droidkaigi.confsched2018.model.Topic
+import io.github.droidkaigi.confsched2018.util.ext.atJST
 import org.threeten.bp.LocalDateTime
 import java.util.Date
 
@@ -43,11 +46,13 @@ fun createDummySession(sessionId: String = DUMMY_SESSION_ID1,
             format = "30分",
             language = "JA",
             topic = Topic(2, "Development tool"),
-            level = Level.of(3540, "Beginner"),
+            level = Level.of(BEGINNER, "Beginner"),
             isFavorited = true, speakers = listOf(
             createDummySpeaker(),
             createDummySpeaker()
-    )
+    ),
+            feedback = createDummySessionFeedback(),
+            message = null
     )
 }
 
@@ -55,7 +60,6 @@ fun createDummySessionFeedbackEntities(): List<SessionFeedbackEntity> {
     return listOf(
             SessionFeedbackEntity(
                     sessionId = DUMMY_SESSION_ID1,
-                    sessionTitle = DUMMY_SESSION_TITLE1,
                     totalEvaluation = 1,
                     relevancy = 1,
                     asExpected = 1,
@@ -65,7 +69,6 @@ fun createDummySessionFeedbackEntities(): List<SessionFeedbackEntity> {
                     submitted = false),
             SessionFeedbackEntity(
                     sessionId = DUMMY_SESSION_ID2,
-                    sessionTitle = DUMMY_SESSION_TITLE2,
                     totalEvaluation = 3,
                     relevancy = 3,
                     asExpected = 3,
@@ -77,11 +80,9 @@ fun createDummySessionFeedbackEntities(): List<SessionFeedbackEntity> {
 
 }
 
-fun createDummySessionFeedback(sessionId: String = DUMMY_SESSION_ID1,
-                               sessionTitle: String = DUMMY_SESSION_TITLE1): SessionFeedback {
+fun createDummySessionFeedback(sessionId: String = DUMMY_SESSION_ID1): SessionFeedback {
     return SessionFeedback(
             sessionId = sessionId,
-            sessionTitle = sessionTitle,
             totalEvaluation = 1,
             relevancy = 1,
             asExpected = 1,
@@ -153,24 +154,26 @@ fun createDummySessionWithSpeakersEntities(): List<SessionWithSpeakers> {
             SessionWithSpeakers(SessionEntity(DUMMY_SESSION_ID1,
                     DUMMY_SESSION_TITLE1,
                     "Endless battle",
-                    LocalDateTime.of(1, 1, 1, 1, 1),
-                    LocalDateTime.of(1, 1, 1, 1, 1),
+                    LocalDateTime.of(1, 1, 1, 1, 1).atJST().toInstant(),
+                    LocalDateTime.of(1, 1, 1, 1, 1).atJST().toInstant(),
                     "30分",
                     "日本語",
-                    LevelEntity(3540, "ニッチ / Niche"),
+                    LevelEntity(NICHE, "ニッチ / Niche"),
                     TopicEntity(1, "開発環境 / Development"),
-                    RoomEntity(1, "ホール")),
+                    RoomEntity(1, "ホール"),
+                    null),
                     listOf("aaaa", "bbbb")),
             SessionWithSpeakers(SessionEntity(DUMMY_SESSION_ID2,
                     DUMMY_SESSION_TITLE2,
                     "Endless battle",
-                    LocalDateTime.of(1, 1, 1, 1, 1),
-                    LocalDateTime.of(1, 1, 1, 1, 1),
+                    LocalDateTime.of(1, 1, 1, 1, 1).atJST().toInstant(),
+                    LocalDateTime.of(1, 1, 1, 1, 1).atJST().toInstant(),
                     "30分",
                     "日本語",
-                    LevelEntity(3542, "ニッチ / Niche"),
+                    LevelEntity(NICHE, "ニッチ / Niche"),
                     TopicEntity(1, "開発環境 / Development"),
-                    RoomEntity(1, "ホール")),
+                    RoomEntity(1, "ホール"),
+                    null),
                     listOf("aaaa"))
     )
 }
